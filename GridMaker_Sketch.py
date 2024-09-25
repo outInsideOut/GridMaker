@@ -1,5 +1,7 @@
 import json
 from pprint import pprint
+import fnmatch
+import os
 
 # takes a json <dict>entries and constructs an object from it
 # !! FEED ME GOOD JSON ONLY !!
@@ -11,12 +13,22 @@ class Struct:
 
 
 def readJsonFile(file):
+    if not file:
+        raise ValueError("File not found or file pattern did not match.")
     with open(file, 'r') as openFile:
         return json.load(openFile)
 
 
-qualiFile = "Qualifying.json"
-entryListFile = "EntryList.json"
+qualiFile = None
+for file in os.listdir('.'):
+    if fnmatch.fnmatch(file, "*_Q.json"):
+        qualiFile = file
+        break
+entryListFile = None
+for file in os.listdir('.'):
+    if fnmatch.fnmatch(file, "entrylist*.json"):
+        entryListFile = file
+        break
 carOrder = []
 
 quali = readJsonFile(qualiFile)
